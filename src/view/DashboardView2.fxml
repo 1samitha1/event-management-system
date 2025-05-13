@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" text="Dashboard" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TableView prefHeight="286.0" prefWidth="757.0">
+         <columns>
+            <TableColumn prefWidth="260.0" text="EVENT" />
+            <TableColumn minWidth="0.0" prefWidth="140.0" text="VENUE" />
+            <TableColumn minWidth="0.0" prefWidth="76.0" text="DAY" />
+            <TableColumn prefWidth="79.0" text="PRICE (AUD)" />
+            <TableColumn prefWidth="105.0" text="#SOLD TICKETS" />
+            <TableColumn prefWidth="108.0" text="#TOTAL TICKETS" />
+         </columns>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TableView>
+   </children>
+</VBox>
