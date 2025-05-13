@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Database {
+public class DatabaseModel {
     String connectionString = "jdbc:sqlite:events.db";
 
     public Connection getConnection() throws SQLException {
