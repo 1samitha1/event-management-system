@@ -26,11 +26,13 @@ public class LoginController {
 
     @FXML
     public void loginHandler(ActionEvent Event) throws IOException {
+        String userNameVal = username.getText();
+        String passwordVal = password.getText();
 
-        System.out.println("username : "+ username.getText());
-        System.out.println("password : "+ password.getText());
+        if(!userNameVal.isEmpty() && !passwordVal.isEmpty()){
 
-        if(username.getText().equals("samitha") && password.getText().equals("123")){
+
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
             DashboardController dashboard = new DashboardController(stage);
             loader.setController(dashboard);
@@ -48,8 +50,8 @@ public class LoginController {
     public void displaySignupView(ActionEvent Event) throws IOException {
         System.out.println("signup called");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignupView.fxml"));
-        DashboardController dashboard = new DashboardController(stage);
-        loader.setController(dashboard);
+        SignupController signup = new SignupController(stage);
+        loader.setController(signup);
         Parent root = loader.load();
         stage.setTitle("Signup");
         stage.setScene(new Scene(root));

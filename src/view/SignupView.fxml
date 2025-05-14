@@ -29,12 +29,12 @@
       </PasswordField>
       <Label prefWidth="250.0" text="Confirm Password" />
       <PasswordField fx:id="passwordConf" maxWidth="250.0" />
-      <Label prefWidth="250.0" text="Prefered Name" />
-      <PasswordField fx:id="preferedName" maxWidth="250.0" />
+      <Label prefWidth="250.0" text="Preferred Name" />
+      <TextField fx:id="preferredName" maxWidth="250.0" />
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="400.0" spacing="20.0">
          <children>
-            <Button fx:id="createUser" mnemonicParsing="false" text="Signup" />
-            <Button fx:id="cancelSignup" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="createUser" mnemonicParsing="false" onAction="#signupHandler" text="Signup" />
+            <Button fx:id="cancelSignup" mnemonicParsing="false" onAction="#goToLoginPage" text="Cancel" />
          </children>
       </HBox>
       <Label fx:id="errorMsg" textFill="#d02222" />

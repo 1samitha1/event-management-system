@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.DAO.UserDAO;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignupController {
     private Stage stage;
@@ -16,21 +19,56 @@ public class SignupController {
         this.stage = stage;
     }
 
+    private UserDAO uDAO = new UserDAO();
+
     @FXML
-    public void signupHandler(ActionEvent Event){
-        System.out.println("signup called");
+    private TextField username;
+
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private PasswordField passwordConf;
+
+    @FXML
+    private TextField preferredName;
+
+    @FXML
+    public void signupHandler(ActionEvent Event) throws SQLException, IOException {
+        String usernameField = username.getText();
+        String passwordField = password.getText();
+        String preferredNameField = preferredName.getText();
+        String confirmPasswordField = passwordConf.getText();
+
+        // check confirm for password
+        if(!usernameField.isEmpty() && !passwordField.isEmpty() &&
+                !confirmPasswordField.isEmpty() && !preferredNameField.isEmpty()){
+            if(passwordField.equals(confirmPasswordField)){
+                // calling register method
+                boolean result = uDAO.registerNewUser(usernameField, passwordField, preferredNameField);
+                System.out.println("signup successful!");
+
+
+            }else {
+                System.out.println("Error: Password and Confirm password should be same");
+            }
+
+        }else {
+            System.out.println("Error: Need to fill all fields");
+        }
 
 
     }
 
     @FXML
-    public void signupCancelled(ActionEvent Event) throws IOException {
-        System.out.println("signup called");
+    public void goToLoginPage(ActionEvent Event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
-        DashboardController dashboard = new DashboardController(stage);
-        loader.setController(dashboard);
+        LoginController login = new LoginController(stage);
+        loader.setController(login);
         Parent root = loader.load();
+        stage.setTitle("Login");
         stage.setScene(new Scene(root));
+
 
     }
 }
