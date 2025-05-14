@@ -1,4 +1,4 @@
-package controller;
+package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;

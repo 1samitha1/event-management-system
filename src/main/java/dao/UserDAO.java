@@ -1,7 +1,7 @@
-package model.DAO;
+package main.java.model.dao;
 
-import model.DatabaseModel;
-import model.UserModel;
+import main.java.model.DatabaseModel;
+import main.java.model.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,22 +33,22 @@ public class UserDAO {
         }
     }
 
-//    public UserModel userLogin(String username, String password) {
-//        String query = "SELECT * FROM users WHERE username = ? password = ? ";
-//
-//        try (Connection con = DatabaseModel.getConnection(); PreparedStatement st = con.prepareStatement(query)){
-//            st.setString(1, username);
-//            st.setString(2, password);
-//
-//            ResultSet rs = st.executeQuery();
-//
-//
-//            //if (rs.next()) {
-//                return new UserModel(rs.getString("username"), rs.getString("password"), rs.getString("preferred_name"));
-//            //}
-//
-//        } catch (SQLException e){
-//
-//        }
-//    }
+    public UserModel userLogin(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? password = ? ";
+
+        try (Connection con = DatabaseModel.getConnection(); PreparedStatement st = con.prepareStatement(query)){
+            st.setString(1, username);
+            st.setString(2, password);
+
+            ResultSet rs = st.executeQuery();
+
+
+            //if (rs.next()) {
+                return new UserModel(rs.getString("username"), rs.getString("password"), rs.getString("preferred_name"));
+            //}
+
+        } catch (SQLException e){
+            return null;
+        }
+    }
 }

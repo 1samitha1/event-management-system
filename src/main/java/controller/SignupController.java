@@ -1,4 +1,4 @@
-package controller;
+package main.java.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.DAO.UserDAO;
+import main.java.model.dao.UserDAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -62,7 +62,7 @@ public class SignupController {
 
     @FXML
     public void goToLoginPage(ActionEvent Event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/main.main.java.model.dao.dao.resources.view/LoginView.fxml"));
         LoginController login = new LoginController(stage);
         loader.setController(login);
         Parent root = loader.load();
