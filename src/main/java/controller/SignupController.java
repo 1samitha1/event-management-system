@@ -7,16 +7,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.java.model.dao.UserDAO;
+import main.java.dao.UserDAO;
+import main.java.dao.UserDAOInterface;
+import main.java.model.UserModel;
+import main.java.utils.Notification;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class SignupController {
-    private Stage stage;
+    private final Stage stage;
+    private final UserDAOInterface userDAO;
 
     public SignupController(Stage stage) {
+
         this.stage = stage;
+        this.userDAO = new UserDAO();
     }
 
     private UserDAO uDAO = new UserDAO();
@@ -34,30 +40,65 @@ public class SignupController {
     private TextField preferredName;
 
     @FXML
-    public void signupHandler(ActionEvent Event) throws SQLException, IOException {
-        String usernameField = username.getText();
+//    public void signupHandler(ActionEvent Event) throws SQLException, IOException {
+//        String usernameField = username.getText();
+//        String passwordField = password.getText();
+//        String preferredNameField = preferredName.getText();
+//        String confirmPasswordField = passwordConf.getText();
+//
+//        // check confirm for password
+//        if(!usernameField.isEmpty() && !passwordField.isEmpty() &&
+//                !confirmPasswordField.isEmpty() && !preferredNameField.isEmpty()){
+//            if(passwordField.equals(confirmPasswordField)){
+//                // calling register method
+//                boolean result = uDAO.registerNewUser(usernameField, passwordField, preferredNameField);
+//                System.out.println("signup successful!");
+//
+//
+//            }else {
+//                System.out.println("Error: Password and Confirm password should be same");
+//            }
+//
+//        }else {
+//            System.out.println("Error: Need to fill all fields");
+//        }
+//
+//
+//    }
+    public void signupHandler(ActionEvent event) {
+        String usernameField = username.getText().trim();
         String passwordField = password.getText();
-        String preferredNameField = preferredName.getText();
         String confirmPasswordField = passwordConf.getText();
+        String preferredNameField = preferredName.getText().trim();
 
-        // check confirm for password
-        if(!usernameField.isEmpty() && !passwordField.isEmpty() &&
-                !confirmPasswordField.isEmpty() && !preferredNameField.isEmpty()){
-            if(passwordField.equals(confirmPasswordField)){
-                // calling register method
-                boolean result = uDAO.registerNewUser(usernameField, passwordField, preferredNameField);
-                System.out.println("signup successful!");
-
-
-            }else {
-                System.out.println("Error: Password and Confirm password should be same");
-            }
-
-        }else {
-            System.out.println("Error: Need to fill all fields");
+        // validating required fields
+        if (usernameField.isEmpty() || passwordField.isEmpty() ||
+                confirmPasswordField.isEmpty() || preferredNameField.isEmpty()) {
+            Notification.showError("Error", "All fields are required!");
+            return;
         }
 
+        // check for password confirmation
+        if (!passwordField.equals(confirmPasswordField)) {
+            Notification.showError("Error", "Password and Confirm Password do not match!");
+            return;
+        }
 
+        // Create UserModel object
+        UserModel newUser = new UserModel(usernameField, passwordField, preferredNameField);
+
+        try {
+            boolean result = userDAO.register(newUser);
+            if (result) {
+                //goto login screen
+
+            } else {
+                Notification.showError("Error", "Registration failed!");
+
+            }
+        } catch (SQLException e) {
+            Notification.showError("Error", "Database error!");
+        }
     }
 
     @FXML

@@ -1,0 +1,10 @@
+package main.java.dao;
+
+import main.java.model.UserModel;
+import java.sql.SQLException;
+
+// Interface for UserDao
+public interface UserDAOInterface {
+    boolean register(UserModel user) throws SQLException;
+    UserModel login (String username, String password) throws SQLException;
+}

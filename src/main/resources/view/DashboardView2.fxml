@@ -7,15 +7,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" text="Dashboard" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
+         <VBox.margin>
+            <Insets left="350.0" top="15.0" />
+         </VBox.margin>
       </Label>
-      <TableView prefHeight="286.0" prefWidth="757.0">
+      <Label fx:id="welcomeMsg">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets bottom="30.0" left="50.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <TableView prefHeight="380.0" prefWidth="770.0">
          <columns>
             <TableColumn prefWidth="260.0" text="EVENT" />
             <TableColumn minWidth="0.0" prefWidth="140.0" text="VENUE" />

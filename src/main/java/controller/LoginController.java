@@ -8,15 +8,25 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.java.controller.DashboardController;
+import main.java.dao.UserDAO;
+import main.java.dao.UserDAOInterface;
+import main.java.model.UserModel;
+import main.java.utils.Notification;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginController {
 
-    private Stage stage;
+    private final Stage stage;
+    private final UserDAOInterface UserDAO;
+
+    //private UserDAO uDAO = new UserDAO();
 
     public LoginController(Stage stage) {
+
         this.stage = stage;
+        this.UserDAO = new UserDAO();
     }
 
     @FXML
@@ -30,19 +40,48 @@ public class LoginController {
         String userNameVal = username.getText();
         String passwordVal = password.getText();
 
-        if(!userNameVal.isEmpty() && !passwordVal.isEmpty()){
-
-
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
-            DashboardController dashboard = new DashboardController(stage);
-            loader.setController(dashboard);
-            Parent root = loader.load();
-            stage.setTitle("Dashboard");
-            stage.setScene(new Scene(root));
-        }else {
-            System.out.println("Values empty ");
+        if(userNameVal.isEmpty() || passwordVal.isEmpty()){
+            Notification.showError("Error", "Username or Password is empty!");
+            return;
         }
+
+        try {
+            UserModel result = UserDAO.login(userNameVal, passwordVal);
+            System.out.println(result);
+
+            if(result != null) {
+                String preferredName = result.getPreferredName();
+                System.out.println("Welcome " + preferredName);
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
+                DashboardController dashboard = new DashboardController(stage, result);
+                loader.setController(dashboard);
+                Parent root = loader.load();
+                stage.setTitle("Dashboard");
+                stage.setScene(new Scene(root));
+            }else {
+                Notification.showError("Error", "Login Error!");
+            }
+
+        }catch (SQLException e){
+            Notification.showError("Error", "Database error!");
+        }
+
+//        if(!userNameVal.isEmpty() && !passwordVal.isEmpty()){
+//
+//            UserModel result = UserDAO.login(userNameVal, passwordVal);
+//
+//            System.out.println(result);
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
+//            DashboardController dashboard = new DashboardController(stage);
+//            loader.setController(dashboard);
+//            Parent root = loader.load();
+//            stage.setTitle("Dashboard");
+//            stage.setScene(new Scene(root));
+//        }else {
+//            System.out.println("Values empty ");
+//        }
 
 
     };
