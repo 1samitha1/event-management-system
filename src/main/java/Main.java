@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 
 import main.java.controller.LoginController;
 import main.java.dao.EventDAO;
+import main.java.dao.UserDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
+        // create user table if not exists
+        UserDAO userDAO = new UserDAO();
+        userDAO.setup();
+
         // adding events into database
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("events.dat");
         EventDAO eventDao = new EventDAO();
@@ -34,7 +39,7 @@ public class Main extends Application {
 
         Scene scene1 = new Scene(root);
         primaryStage.setScene(scene1);
-        primaryStage.setTitle("Login");
+        primaryStage.setTitle("System Login");
         primaryStage.show();
 
     }

@@ -52,7 +52,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="errorMsg" textFill="#b91b1b" GridPane.columnIndex="1" GridPane.rowIndex="6" />
    </children>
    <padding>
       <Insets bottom="60.0" right="80.0" top="50.0" />

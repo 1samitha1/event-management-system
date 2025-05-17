@@ -42,8 +42,6 @@ public class UserDAO implements UserDAOInterface {
     @Override
     public UserModel login(String username, String password) {
         String query = "SELECT * FROM users WHERE username = ? AND password = ? ";
-        System.out.println(username);
-        System.out.println(password);
 
         try (Connection con = Database.getConnection(); PreparedStatement st = con.prepareStatement(query)){
             st.setString(1, username);
