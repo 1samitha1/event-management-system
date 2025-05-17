@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.java.controller.DashboardController;
 import main.java.dao.UserDAO;
 import main.java.dao.UserDAOInterface;
 import main.java.model.UserModel;
@@ -53,7 +52,7 @@ public class LoginController {
                 String preferredName = result.getPreferredName();
                 System.out.println("Welcome " + preferredName);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
                 DashboardController dashboard = new DashboardController(stage, result);
                 loader.setController(dashboard);
                 Parent root = loader.load();
@@ -73,7 +72,7 @@ public class LoginController {
 //
 //            System.out.println(result);
 //
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView2.fxml"));
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
 //            DashboardController dashboard = new DashboardController(stage);
 //            loader.setController(dashboard);
 //            Parent root = loader.load();

@@ -1,22 +1,29 @@
 package main.java.dao;
 
-import main.java.model.DatabaseModel;
 import main.java.model.UserModel;
 import main.java.utils.Notification;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO implements UserDAOInterface {
+    private final String TableName = "users";
+
+    @Override
+    public void setup() throws SQLException {
+        try (Connection connection = Database.getConnection();
+             Statement st = connection.createStatement();) {
+            String sql = "CREATE TABLE IF NOT EXISTS "  + TableName +  " (username VARCHAR(10) NOT NULL,"
+                    + "password VARCHAR(16) NOT NULL," + "PRIMARY KEY (username))";
+            st.executeUpdate(sql);
+        }
+    }
 
     // handle user registration
     @Override
     public boolean register(UserModel user) throws SQLException {
         String query = "INSERT INTO users (username, password, preferredName) VALUES (?, ?, ?)";
 
-        try (Connection con = DatabaseModel.getConnection();
+        try (Connection con = Database.getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             st.setString(1, user.getUsername());
@@ -38,7 +45,7 @@ public class UserDAO implements UserDAOInterface {
         System.out.println(username);
         System.out.println(password);
 
-        try (Connection con = DatabaseModel.getConnection(); PreparedStatement st = con.prepareStatement(query)){
+        try (Connection con = Database.getConnection(); PreparedStatement st = con.prepareStatement(query)){
             st.setString(1, username);
             st.setString(2, password);
 

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 // Interface for UserDao
 public interface UserDAOInterface {
+    void setup() throws SQLException;
     boolean register(UserModel user) throws SQLException;
     UserModel login (String username, String password) throws SQLException;
 }

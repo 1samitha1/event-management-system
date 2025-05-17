@@ -7,7 +7,10 @@ import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
 
 import main.java.controller.LoginController;
+import main.java.dao.EventDAO;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 
 public class Main extends Application {
@@ -17,16 +20,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
+        // adding events into database
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("events.dat");
+        EventDAO eventDao = new EventDAO();
+        eventDao.setup();
+        eventDao.loadEvents(inputStream);
 
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources.main.main.java.model.dao.dao.resources.view/LoginView.fxml"));
-//        GridPane root = loader.load();
-//
-//        Scene scene1 = new Scene(root);
-//        primaryStage.setScene(scene1);
-//        primaryStage.setTitle("Login");
-//
-//        primaryStage.show();
-
+        // Display Login view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
         LoginController controller = new LoginController(primaryStage);
         loader.setController(controller);
