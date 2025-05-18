@@ -1,6 +1,7 @@
 package main.java.dao;
 
 import main.java.model.UserModel;
+import main.java.utils.Authentication;
 import main.java.utils.Notification;
 
 import java.sql.*;
@@ -13,7 +14,7 @@ public class UserDAO implements UserDAOInterface {
         try (Connection connection = Database.getConnection();
              Statement st = connection.createStatement();) {
             String sql = "CREATE TABLE IF NOT EXISTS "  + TableName +  " (username VARCHAR(10) NOT NULL,"
-                    + "password VARCHAR(16) NOT NULL," + "PRIMARY KEY (username))";
+                    + "password VARCHAR(20) NOT NULL, preferredName VARCHAR(10) NOT NULL," + "PRIMARY KEY (username))";
             st.executeUpdate(sql);
         }
     }
@@ -26,8 +27,12 @@ public class UserDAO implements UserDAOInterface {
         try (Connection con = Database.getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
+            //hashing password before add into db
+            String passwordHash = Authentication.hashPassword(user.getPassword());
+
             st.setString(1, user.getUsername());
-            st.setString(2, user.getPassword());
+//            st.setString(2, user.getPassword());
+            st.setString(2, passwordHash);
             st.setString(3, user.getPreferredName());
 
             st.executeUpdate();
@@ -44,8 +49,14 @@ public class UserDAO implements UserDAOInterface {
         String query = "SELECT * FROM users WHERE username = ? AND password = ? ";
 
         try (Connection con = Database.getConnection(); PreparedStatement st = con.prepareStatement(query)){
+
+            // create a matching hash for provided string password
+            String hashedPassword = Authentication.hashPassword(password);
+
             st.setString(1, username);
-            st.setString(2, password);
+//            st.setString(2, password);
+            //add hashed password to match with db password
+            st.setString(2, hashedPassword);
 
             ResultSet rs = st.executeQuery();
             if (rs.next()) {

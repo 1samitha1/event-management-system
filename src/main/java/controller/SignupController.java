@@ -40,31 +40,6 @@ public class SignupController {
     private TextField preferredName;
 
     @FXML
-//    public void signupHandler(ActionEvent Event) throws SQLException, IOException {
-//        String usernameField = username.getText();
-//        String passwordField = password.getText();
-//        String preferredNameField = preferredName.getText();
-//        String confirmPasswordField = passwordConf.getText();
-//
-//        // check confirm for password
-//        if(!usernameField.isEmpty() && !passwordField.isEmpty() &&
-//                !confirmPasswordField.isEmpty() && !preferredNameField.isEmpty()){
-//            if(passwordField.equals(confirmPasswordField)){
-//                // calling register method
-//                boolean result = uDAO.registerNewUser(usernameField, passwordField, preferredNameField);
-//                System.out.println("signup successful!");
-//
-//
-//            }else {
-//                System.out.println("Error: Password and Confirm password should be same");
-//            }
-//
-//        }else {
-//            System.out.println("Error: Need to fill all fields");
-//        }
-//
-//
-//    }
     public void signupHandler(ActionEvent event) {
         String usernameField = username.getText().trim();
         String passwordField = password.getText();
@@ -90,7 +65,7 @@ public class SignupController {
         try {
             boolean result = userDAO.register(newUser);
             if (result) {
-                //goto login screen
+                goToLoginPage(event);
 
             } else {
                 Notification.showError("Error", "Registration failed!");
@@ -102,14 +77,18 @@ public class SignupController {
     }
 
     @FXML
-    public void goToLoginPage(ActionEvent Event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/main.main.java.model.dao.dao.resources.view/LoginView.fxml"));
-        LoginController login = new LoginController(stage);
-        loader.setController(login);
-        Parent root = loader.load();
-        stage.setTitle("Login");
-        stage.setScene(new Scene(root));
+    public void goToLoginPage(ActionEvent Event){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+            LoginController login = new LoginController(stage);
+            loader.setController(login);
+            Parent root = loader.load();
+            stage.setTitle("Login");
+            stage.setScene(new Scene(root));
 
-
+        } catch (IOException e) {
+            Notification.showError("Error", "System error!");
+            throw new RuntimeException(e);
+        }
     }
 }

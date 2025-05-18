@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="welcomeMsg">
+      <ImageView fx:id="shoppingCart" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+         <VBox.margin>
+            <Insets left="740.0" top="7.0" />
+         </VBox.margin>
+         <image>
+            <Image url="@../images/cart.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <Label fx:id="welcomeMsg" textFill="#083b94">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <VBox.margin>
-            <Insets bottom="30.0" left="50.0" top="20.0" />
+            <Insets bottom="20.0" left="50.0" />
          </VBox.margin>
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
       </Label>
-      <TableView fx:id="eventsTable" prefHeight="380.0" prefWidth="770.0">
+      <TableView fx:id="eventsTable" prefHeight="404.0" prefWidth="770.0">
          <columns>
             <TableColumn fx:id="nameColumn" prefWidth="260.0" text="EVENT" />
             <TableColumn fx:id="venueColumn" minWidth="0.0" prefWidth="140.0" text="VENUE" />

@@ -48,7 +48,7 @@ public class DashboardController {
     @FXML
     public void initialize() {
         if(user != null){
-            welcomeMsg.setText("Welcome "+ user.getPreferredName());
+            welcomeMsg.setText("Welcome "+ user.getPreferredName() +".");
         }
 
         // get data from eventModel
