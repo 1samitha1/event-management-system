@@ -39,6 +39,7 @@ public class LoginController {
         String userNameVal = username.getText();
         String passwordVal = password.getText();
 
+        // check is both username and password fields are filled
         if(userNameVal.isEmpty() || passwordVal.isEmpty()){
             Notification.showError("Error", "Username or Password is empty!");
             return;
@@ -46,11 +47,11 @@ public class LoginController {
 
         try {
             UserModel result = UserDAO.login(userNameVal, passwordVal);
-            System.out.println(result);
 
+            // User found
             if(result != null) {
-                String preferredName = result.getPreferredName();
-                System.out.println("Welcome " + preferredName);
+//                String preferredName = result.getPreferredName();
+//                System.out.println("Welcome " + preferredName);
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
                 DashboardController dashboard = new DashboardController(stage, result);
@@ -65,29 +66,10 @@ public class LoginController {
         }catch (SQLException e){
             Notification.showError("Error", "Database error!");
         }
-
-//        if(!userNameVal.isEmpty() && !passwordVal.isEmpty()){
-//
-//            UserModel result = UserDAO.login(userNameVal, passwordVal);
-//
-//            System.out.println(result);
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
-//            DashboardController dashboard = new DashboardController(stage);
-//            loader.setController(dashboard);
-//            Parent root = loader.load();
-//            stage.setTitle("Dashboard");
-//            stage.setScene(new Scene(root));
-//        }else {
-//            System.out.println("Values empty ");
-//        }
-
-
     };
 
     @FXML
     public void displaySignupView(ActionEvent Event) throws IOException {
-        System.out.println("signup called");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignupView.fxml"));
         SignupController signup = new SignupController(stage);
         loader.setController(signup);
@@ -96,4 +78,19 @@ public class LoginController {
         stage.setScene(new Scene(root));
 
     };
+
+    // This method display the login view when its called
+    public void displayLoginPage(ActionEvent Event){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+            LoginController login = new LoginController(stage);
+            loader.setController(login);
+            Parent root = loader.load();
+            stage.setTitle("Login");
+            stage.setScene(new Scene(root));
+
+        } catch (IOException e) {
+            Notification.showError("Error", "System error!");
+        }
+    }
 }

@@ -34,7 +34,7 @@
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="400.0" spacing="20.0">
          <children>
             <Button fx:id="createUser" mnemonicParsing="false" onAction="#signupHandler" text="Signup" />
-            <Button fx:id="cancelSignup" mnemonicParsing="false" onAction="#goToLoginPage" text="Cancel" />
+            <Button fx:id="cancelSignup" mnemonicParsing="false" onAction="#returnToLogin" text="Cancel" />
          </children>
       </HBox>
       <Label fx:id="errorMsg" textFill="#d02222" />

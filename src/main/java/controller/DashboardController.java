@@ -2,6 +2,7 @@ package main.java.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -18,7 +19,6 @@ public class DashboardController {
     private UserModel user;
 
     public DashboardController(Stage stage, UserModel user) {
-
         this.stage = stage;
         this.user = user;
     }
@@ -85,5 +85,12 @@ public class DashboardController {
         } catch (SQLException e) {
             Notification.showError("Error", "Error while display events table");
         }
+    }
+
+    @FXML
+    public void logout(ActionEvent Event){
+        LoginController lc = new LoginController(stage);
+        //calling the method to display login view
+        lc.displayLoginPage(Event);
     }
 }

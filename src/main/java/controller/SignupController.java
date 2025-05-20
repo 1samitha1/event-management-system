@@ -65,10 +65,12 @@ public class SignupController {
         try {
             boolean result = userDAO.register(newUser);
             if (result) {
-                goToLoginPage(event);
+                System.out.println("Signup successful");
+                returnToLogin(event);
+
 
             } else {
-                Notification.showError("Error", "Registration failed!");
+                Notification.showError("Error", "Registration failed. Try again by adding a different username");
 
             }
         } catch (SQLException e) {
@@ -77,18 +79,8 @@ public class SignupController {
     }
 
     @FXML
-    public void goToLoginPage(ActionEvent Event){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
-            LoginController login = new LoginController(stage);
-            loader.setController(login);
-            Parent root = loader.load();
-            stage.setTitle("Login");
-            stage.setScene(new Scene(root));
-
-        } catch (IOException e) {
-            Notification.showError("Error", "System error!");
-            throw new RuntimeException(e);
-        }
+    private void returnToLogin(ActionEvent event) {
+        LoginController lg = new LoginController(stage);
+        lg.displayLoginPage(event);
     }
 }
