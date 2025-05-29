@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
 
-public class EventDAO implements EventInterface {
+public class EventDAO implements EventDAOInterface {
     private final String TableName = "eventsInfo";
 
     // Method for setting up the eventsInfo table

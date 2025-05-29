@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
 
 import main.java.controller.LoginController;
+import main.java.dao.CartItemDAO;
 import main.java.dao.EventDAO;
 import main.java.dao.UserDAO;
 
@@ -25,11 +26,15 @@ public class Main extends Application {
         UserDAO userDAO = new UserDAO();
         userDAO.setup();
 
-        // adding events into database
+        // create events table if not exists and adding events into database
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("events.dat");
         EventDAO eventDao = new EventDAO();
         eventDao.setup();
         eventDao.loadEvents(inputStream);
+
+        // create cartItems table if not exists
+        CartItemDAO cartItemDAO = new CartItemDAO();
+        cartItemDAO.setup();
 
         // Display Login view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));

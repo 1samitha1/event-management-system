@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="271.0" prefWidth="473.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="90.0" layoutY="36.0" text="Selected Item: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="itemNameLabel" layoutX="226.0" layoutY="36.0" text="item-name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="90.0" layoutY="124.0" text="Quantity:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="addItemToCart" layoutX="146.0" layoutY="196.0" mnemonicParsing="false" onAction="#addEventToCart" prefHeight="26.0" prefWidth="76.0" text="Add" />
+      <Button layoutX="240.0" layoutY="196.0" mnemonicParsing="false" onAction="#closeAddToCartPopUp" prefHeight="26.0" prefWidth="69.0" text="Cancel" />
+      <Label layoutX="94.0" layoutY="78.0" text="Venue">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="itemVenueLabel" layoutX="226.0" layoutY="78.0" text="item-name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="addedQuantity" layoutX="230.0" layoutY="123.0" prefHeight="26.0" prefWidth="41.0" />
+   </children>
+</AnchorPane>

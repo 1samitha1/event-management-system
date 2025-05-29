@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 //Interface for event class
-public interface EventInterface {
+public interface EventDAOInterface {
     void setup() throws SQLException;
     void loadEvents(InputStream inputStream) throws SQLException;
     ResultSet getAllEvents() throws SQLException;
