@@ -141,8 +141,8 @@ public class CartItemController {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
 
         // Check if event day is today or later in the same week
-        //return eventDay.getValue() >= today.getValue();
-        return true;
+        return eventDay.getValue() >= today.getValue();
+
     }
 
 

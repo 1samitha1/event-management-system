@@ -124,6 +124,13 @@ public class OrderController {
     @FXML
     public void confirmCheckout() {
         try {
+
+            // verify 6 digits confirmation code
+            if (!confirmCode.getText().matches("\\d{6}")) {
+                Notification.showError("Invalid Confirmation code", "Enter correct 6 digits confirmation code.");
+                return;
+            }
+
             for (CartItemModel c : cartLines) {
                 // create date and time format for the order
                 String orderTimeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
