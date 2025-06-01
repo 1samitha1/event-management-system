@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import main.java.dao.CartItemDAO;
 import main.java.dao.EventDAO;
@@ -22,6 +23,9 @@ import main.java.model.OrderModel;
 import main.java.model.UserModel;
 import main.java.utils.Notification;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -38,6 +42,7 @@ public class OrderController {
 
     private double grandTotal;
     private List<CartItemModel> cartLines;
+    private List<OrderModel> ordersList;
 
     private Scene previousScene;
 
@@ -66,6 +71,7 @@ public class OrderController {
         this.stage = stage;
     }
 
+
     @FXML
     public void initialize() {
         try {
@@ -87,9 +93,11 @@ public class OrderController {
                 orderTotal.setText(String.format("$ %.2f", grandTotal));
             }
 
+            // store order list for the user
+            ordersList = orderDao.getOrdersByUsername(this.user.getUsername());
 
             // load order data into view
-            loadOrdersToView(this.user.getUsername());
+            loadOrdersToView();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -117,6 +125,7 @@ public class OrderController {
     public void confirmCheckout() {
         try {
             for (CartItemModel c : cartLines) {
+                // create date and time format for the order
                 String orderTimeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 OrderModel order = new OrderModel(
                         user.getUsername(),
@@ -139,15 +148,11 @@ public class OrderController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    public void loadOrdersToView(String username){
-        //list from ordersDAO
-        List<OrderModel> orders = orderDao.getOrdersByUsername(username);
-
+    public void loadOrdersToView(){
         // List for the view
-        ObservableList<OrderModel> data = FXCollections.observableArrayList(orders);
+        ObservableList<OrderModel> data = FXCollections.observableArrayList(ordersList);
 
         // bind order number with 4 digits format
         if(orderNo != null) {
@@ -184,9 +189,52 @@ public class OrderController {
 
     @FXML
     private void goBack() {
+        // go back to the previous screen
         if (previousScene != null) {
             stage.setScene(previousScene);
         }
     }
 
+    @FXML
+    private void handleExportOrdersToFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Orders As");
+
+        // default filename
+        fileChooser.setInitialFileName("orderList.txt");
+
+        //only show text files
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+        );
+
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            exportOrdersToFile(file);
+        }
+    };
+
+    private void exportOrdersToFile(File file) {
+        //create file writer for write into the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (OrderModel order : ordersList) {
+                //convert id into 4 digits
+                String orderIdFormatted = String.format("%04d", order.getId());
+                //create file lines
+                String line = String.format(
+                        "Order No: #%s Event: %s (%d seats) Date: %s Total: AUD %.2f \n",
+                        orderIdFormatted,
+                        order.getEventName(),
+                        order.getQuantity(),
+                        order.getOrderDate(),
+                        order.getTotalPrice()
+                );
+                //write into the file
+                writer.write(line);
+            }
+
+        } catch (IOException e) {
+            Notification.showError("Export Failed", "Could not save orders: " + e.getMessage());
+        }
+    };
 }

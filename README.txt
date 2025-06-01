@@ -8,8 +8,8 @@ Student Name: Samitha Mihiranga Gunarathna
 // Y Bookings are validated
 // Y Checkout is validated with confirmation code and day information
 // Y Remaining seats of events is updated once an order is made
-// N User can view all orders
-// N User can export orders to file
+// Y User can view all orders
+// Y User can export orders to file
 // N Admin GUI & admin login implemented
 // N Admin display implemented (no duplicate event titles)
 // N Event disable function implemented

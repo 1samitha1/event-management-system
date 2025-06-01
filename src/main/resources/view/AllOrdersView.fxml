@@ -16,6 +16,6 @@
         </columns>
       </TableView>
       <Button layoutX="685.0" layoutY="360.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="67.0" text="Close" />
-      <Button fx:id="exportButton" layoutX="605.0" layoutY="361.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="67.0" text="Export" />
+      <Button fx:id="exportButton" layoutX="605.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleExportOrdersToFile" prefHeight="26.0" prefWidth="67.0" text="Export" />
    </children>
 </AnchorPane>
