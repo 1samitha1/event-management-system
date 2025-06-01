@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="154.0" layoutY="109.0" text="Order total:" />
+      <Label layoutX="154.0" layoutY="219.0" text="Enter your 6-digits confirmation code below" />
+      <TextField fx:id="confirmCode" layoutX="193.0" layoutY="248.0" />
+      <Button fx:id="checkoutButton" layoutX="136.0" layoutY="320.0" mnemonicParsing="false" onAction="#confirmCheckout" text="Confirm Checkout" />
+      <Button fx:id="cancelCheckoutButton" layoutX="301.0" layoutY="320.0" mnemonicParsing="false" onAction="#cancelCheckout" prefHeight="26.0" prefWidth="117.0" text="Cancel" />
+      <Label fx:id="orderTotal" layoutX="301.0" layoutY="109.0" />
+   </children>
 </AnchorPane>

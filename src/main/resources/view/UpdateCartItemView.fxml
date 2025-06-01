@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="248.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.UpdateCartItemController">
+   <children>
+      <Label layoutX="86.0" layoutY="51.0" text="Event Name:" />
+      <Label fx:id="eventNameUpdate" layoutX="203.0" layoutY="51.0" />
+      <Label layoutX="86.0" layoutY="93.0" text="Quantity:" />
+      <TextField fx:id="quantityUpdate" layoutX="201.0" layoutY="89.0" prefHeight="26.0" prefWidth="70.0" />
+      <Button layoutX="136.0" layoutY="175.0" mnemonicParsing="false" onAction="#updateQuantity" text="Update" />
+      <Button layoutX="242.0" layoutY="175.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
+   </children>
+</AnchorPane>

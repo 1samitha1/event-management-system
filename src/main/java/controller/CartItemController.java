@@ -1,13 +1,7 @@
 package main.java.controller;
 
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import main.java.dao.CartItemDAO;
+import main.java.dao.EventDAO;
 import main.java.model.CartItemModel;
 import main.java.model.EventModel;
 import main.java.model.UserModel;
@@ -22,13 +17,17 @@ import main.java.utils.Notification;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.List;
 
-public class CartController {
+public class CartItemController {
     private final Stage stage;
     private UserModel user;
     private String itemName;
     private String itemVenue;
     private EventModel selectedEvent;
+    EventDAO eventDAO = new EventDAO();
 
     @FXML
     private ImageView shoppingCart;
@@ -51,7 +50,7 @@ public class CartController {
     @FXML
     private TableColumn<CartItemModel, Number> cartViewQuantity;
 
-    public CartController(Stage stage, UserModel user, EventModel selected) {
+    public CartItemController(Stage stage, UserModel user, EventModel selected) {
         this.stage = stage;
         this.user = user;
         this.itemName = selected.getName().get();
@@ -62,21 +61,8 @@ public class CartController {
 
     @FXML
     public void initialize() {
-//        CartItemDAO cartItemDAO = new CartItemDAO();
         itemNameLabel.setText(this.itemName);
         itemVenueLabel.setText(this.itemVenue);
-
-//        cartViewItemName.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
-//        cartViewQuantity.setCellValueFactory(cell -> cell.getValue().quantityProperty());
-//
-//        try {
-//            ObservableList<CartItemModel> observableCart =
-//                    FXCollections.observableArrayList(cartItemDAO.getItemsForUser(this.user.getUsername()));
-//
-//            allCartItems.setItems(observableCart);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
 
     }
 
@@ -93,6 +79,18 @@ public class CartController {
         try {
             int quantity = Integer.parseInt(addedQuantity.getText());
 
+            // check if the event day is passed with today.
+            String dayOfTheEvent = eventDAO.getDayForEvent(this.selectedEvent.getId().get());
+            boolean bookableDay = isDayBookable(dayOfTheEvent);
+
+            System.out.println("bookableDay : "+ bookableDay);
+
+            if (dayOfTheEvent == null || !bookableDay) {
+                Notification.showError("Day is passed", "You can no longer book this event on (" + dayOfTheEvent + "). Event day is passed!");
+                return;
+            }
+
+            // check is the entered quantity is valid
             if (quantity <= 0) {
                 Notification.showError("Invalid Quantity", "Please enter a valid positive number.");
                 return;
@@ -100,8 +98,9 @@ public class CartController {
 
             int availableTickets = selectedEvent.getTotalTickets().get() - selectedEvent.getTicketsSold().get();
 
+            // check is there are enough seats for added quantity
             if (quantity > availableTickets) {
-                Notification.showError("Not Enough Seats", "Only " + availableTickets + " seats available for " + selectedEvent.getName());
+                Notification.showError("Not Enough Seats", "Only " + availableTickets + " seats available for the event ");
                 return;
             }
 
@@ -121,19 +120,38 @@ public class CartController {
 
         } catch (NumberFormatException e) {
             Notification.showError("Invalid Input", "Please enter a valid quantity.");
-        } catch (SQLException e) {
-            Notification.showError("Error", "Application Error");
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             Notification.showError("Error", "Application Error");
             throw new RuntimeException(e);
         }
     }
 
+    private boolean isDayBookable(String eventDay3) {
+        DayOfWeek eventDay = switch (eventDay3) {
+            case "Mon" -> DayOfWeek.MONDAY;
+            case "Tue" -> DayOfWeek.TUESDAY;
+            case "Wed" -> DayOfWeek.WEDNESDAY;
+            case "Thu" -> DayOfWeek.THURSDAY;
+            case "Fri" -> DayOfWeek.FRIDAY;
+            case "Sat" -> DayOfWeek.SATURDAY;
+            case "Sun" -> DayOfWeek.SUNDAY;
+            default -> throw new IllegalArgumentException("Invalid day: " + eventDay3);
+        };
+
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+
+        // Check if event day is today or later in the same week
+        //return eventDay.getValue() >= today.getValue();
+        return true;
+    }
+
+
+
+
 //    void displayEventsInCart() throws IOException {
 //        // display event selection
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CartView.fxml"));
-//        CartController cart = new CartController(stage, user, this.selectedEvent);
+//        CartItemController cart = new CartItemController(stage, user, this.selectedEvent);
 //        loader.setController(cart);
 //        Parent root = loader.load();
 //        stage.setTitle("Shopping Cart");

@@ -1,6 +1,7 @@
 package main.java.dao;
 
 import main.java.model.CartItemModel;
+import main.java.utils.Notification;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ public class CartItemDAO implements CartItemDAOInterface {
     @Override
     public List<CartItemModel> getItemsForUser(String username) throws SQLException {
         List<CartItemModel> items = new ArrayList<>();
-        String sql = "SELECT * FROM " + TableName + " WHERE username = ?";
+        String sql = "SELECT c.id, c.username, c.eventId, c.quantity, e.name AS eventName\n" +
+                " FROM " + TableName + " c JOIN eventsInfo e ON c.eventId = e.id WHERE c.username = ?";
 
         try (Connection con = Database.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -55,7 +57,8 @@ public class CartItemDAO implements CartItemDAOInterface {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getInt("eventId"),
-                        rs.getInt("quantity")
+                        rs.getInt("quantity"),
+                        rs.getString("eventName")
                 ));
             }
         }
@@ -98,15 +101,30 @@ public class CartItemDAO implements CartItemDAOInterface {
     }
 
     public int getTotalReservedQuantityForEvent(int eventId) throws SQLException {
-        String sql = "SELECT SUM(quantity) as total FROM cart_items WHERE eventId = ?";
+        String query = "SELECT SUM(quantity) as total FROM" + TableName + " WHERE eventId = ?";
 
         try (Connection con = Database.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+             PreparedStatement st = con.prepareStatement(query)) {
 
             st.setInt(1, eventId);
             ResultSet rs = st.executeQuery();
             return rs.next() ? rs.getInt("total") : 0;
         }
+    }
+
+    public void removeCartItem(int id) {
+        System.out.println("id: " + id);
+        String query = "DELETE FROM " + TableName + " WHERE id = ?";
+        try (Connection con = Database.getConnection();
+             PreparedStatement st = con.prepareStatement(query)) {
+
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            Notification.showError("Error Deleting", "Failed to remove cart item");
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

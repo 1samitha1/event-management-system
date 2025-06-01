@@ -135,28 +135,45 @@ public class DashboardController {
         }
 
         System.out.println("Selected Event: " + selected.getName());
-        String itemName = selected.getName().get();
-        String itemVenue = selected.getVenue().get();
 
         // display event selection
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddCartItemView.fxml"));
-        CartController cart = new CartController(stage, user, selected);
+        CartItemController cart = new CartItemController(stage, user, selected);
         loader.setController(cart);
         Parent root = loader.load();
         stage.setTitle("Add to cart");
         stage.setScene(new Scene(root));
     }
 
+    @FXML
     public void openShoppingCart() {
+        try {
+            CartController cart = new CartController(stage, user);
+            cart.displayEventsInCart();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
+    // this method is get called whenever dashboard view need to be appear after some actions
     public void displayDashboard(UserModel useData) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
         DashboardController dashboard = new DashboardController(stage, useData);
         loader.setController(dashboard);
         Parent root = loader.load();
         stage.setTitle("Dashboard");
+        stage.setScene(new Scene(root));
+    }
+
+    @FXML
+    public void viewAllOrders() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AllOrdersView.fxml"));
+        OrderController orders = new OrderController(user, stage);
+        orders.setPreviousScene(stage.getScene());
+        loader.setController(orders);
+        Parent root = loader.load();
+        stage.setTitle("All Orders");
         stage.setScene(new Scene(root));
     }
 

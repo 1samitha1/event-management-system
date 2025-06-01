@@ -5,30 +5,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="cartButton" mnemonicParsing="false">
+      <Button fx:id="cartButton" mnemonicParsing="false" onAction="#openShoppingCart">
          <VBox.margin>
             <Insets left="725.0" top="5.0" />
-         </VBox.margin>
-      </Button>
-      <Button fx:id="addToCart" disable="true" mnemonicParsing="false" onAction="#displaySelection" text="Add to Cart">
-         <font>
-            <Font size="10.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="5.0" left="705.0" top="5.0" />
-         </VBox.margin>
-      </Button>
-      <Button fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Logout">
-         <font>
-            <Font size="10.0" />
-         </font>
-         <VBox.margin>
-            <Insets left="722.0" top="5.0" />
          </VBox.margin>
       </Button>
       <Label fx:id="welcomeMsg" textFill="#083b94">
@@ -36,12 +21,36 @@
             <Insets />
          </opaqueInsets>
          <VBox.margin>
-            <Insets bottom="20.0" left="50.0" top="-35.0" />
+            <Insets bottom="20.0" left="40.0" top="-10.0" />
          </VBox.margin>
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
+      <AnchorPane prefHeight="27.0" prefWidth="770.0">
+         <children>
+            <Button fx:id="showAllOrders" layoutX="181.0" layoutY="1.0" mnemonicParsing="false" onAction="#viewAllOrders" prefHeight="18.0" prefWidth="71.0" text="All Orders">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Button fx:id="showAllOrders1" layoutX="11.0" layoutY="1.0" mnemonicParsing="false" onAction="#viewAllOrders" prefHeight="18.0" prefWidth="71.0" text="Profile">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Button fx:id="addToCart" disable="true" layoutX="95.0" layoutY="1.0" mnemonicParsing="false" onAction="#displaySelection" prefHeight="20.0" prefWidth="71.0" text="Add to Cart">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Button fx:id="logout" layoutX="716.0" layoutY="1.0" mnemonicParsing="false" onAction="#logout" text="Logout">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
       <TableView fx:id="eventsTable" prefHeight="386.0" prefWidth="770.0">
          <columns>
             <TableColumn fx:id="nameColumn" prefWidth="260.0" text="EVENT" />

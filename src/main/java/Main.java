@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import main.java.controller.LoginController;
 import main.java.dao.CartItemDAO;
 import main.java.dao.EventDAO;
+import main.java.dao.OrderDAO;
 import main.java.dao.UserDAO;
 
 import java.io.IOException;
@@ -35,6 +36,10 @@ public class Main extends Application {
         // create cartItems table if not exists
         CartItemDAO cartItemDAO = new CartItemDAO();
         cartItemDAO.setup();
+
+        // create orders table if not exists
+        OrderDAO orderDAO = new OrderDAO();
+        orderDAO.setup();
 
         // Display Login view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));

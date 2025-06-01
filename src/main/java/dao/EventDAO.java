@@ -61,4 +61,60 @@ public class EventDAO implements EventDAOInterface {
         PreparedStatement st = con.prepareStatement(query);
         return st.executeQuery();
     }
+
+    @Override
+    public double getPriceForEvent(int eventId) throws SQLException {
+        String query = "SELECT price FROM " + TableName + " WHERE id = ?";
+
+        try (Connection con = Database.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, eventId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("price");
+                } else {
+                    throw new SQLException("Event not found for ID: " + eventId);
+                }
+            }
+        }
+    }
+
+    @Override
+    public ResultSet getEvent(int eventId, String eventName){
+        String query = "SELECT * FROM " + TableName + " WHERE id = ? AND name = ?";
+
+        try (Connection con = Database.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, eventId);
+            ps.setString(2, eventName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs;
+                } else {
+                    throw new SQLException("Event not found for ID: " + eventId);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    };
+
+    @Override
+    public String getDayForEvent(int eventId) {
+        String query = "SELECT day FROM " + TableName + " WHERE id = ?";
+
+        try (Connection con = Database.getConnection();
+             PreparedStatement st = con.prepareStatement(query)) {
+
+            st.setInt(1, eventId);
+            ResultSet rs = st.executeQuery();
+            return rs.next() ? rs.getString("day") : null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
 }
