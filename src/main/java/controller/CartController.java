@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.java.dao.CartItemDAO;
@@ -33,7 +30,8 @@ public class CartController {
     @FXML
     private TableColumn<CartItemModel, Number> cartViewQuantity;
 
-
+    @FXML
+    private Button cartCheckout;
 
     public CartController(Stage stage, UserModel user) {
         this.stage = stage;
@@ -48,10 +46,14 @@ public class CartController {
         cartViewQuantity.setCellValueFactory(cell -> cell.getValue().quantityProperty());
 
         try {
-            ObservableList<CartItemModel> observableCart =
+            ObservableList<CartItemModel> cartList =
                     FXCollections.observableArrayList(cartItemDAO.getItemsForUser(this.user.getUsername()));
 
-            cartTable.setItems(observableCart);
+            cartTable.setItems(cartList);
+
+            // if there are no items in car, the checkout button is disabled.
+            cartCheckout.setDisable(cartList.isEmpty());
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -126,21 +128,5 @@ public class CartController {
         cartTable.getItems().setAll(
                 FXCollections.observableArrayList(ct.getItemsForUser(user.getUsername()))
         );
-
-//        if(selectedItem != null){
-//
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCartItemView.fxml"));
-//            CartController cart = new CartController(this.stage, this.user);
-//            loader.setController(cart);
-//            Parent root = loader.load();
-//            stage.setTitle("Update Item Quantity");
-//            stage.setScene(new Scene(root));
-//
-//        }else {
-//            Notification.showWarning("Select item first", "You must select item from the table before update");
-//        }
-
-
     }
 }

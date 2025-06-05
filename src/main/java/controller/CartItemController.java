@@ -146,16 +146,4 @@ public class CartItemController {
     }
 
 
-
-
-//    void displayEventsInCart() throws IOException {
-//        // display event selection
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CartView.fxml"));
-//        CartItemController cart = new CartItemController(stage, user, this.selectedEvent);
-//        loader.setController(cart);
-//        Parent root = loader.load();
-//        stage.setTitle("Shopping Cart");
-//        stage.setScene(new Scene(root));
-//    }
-
 }

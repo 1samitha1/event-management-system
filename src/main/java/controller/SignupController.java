@@ -20,7 +20,6 @@ public class SignupController {
     private final UserDAOInterface userDAO;
 
     public SignupController(Stage stage) {
-
         this.stage = stage;
         this.userDAO = new UserDAO();
     }
@@ -83,4 +82,5 @@ public class SignupController {
         LoginController lg = new LoginController(stage);
         lg.displayLoginPage(event);
     }
+
 }

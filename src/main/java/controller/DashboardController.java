@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import main.java.dao.EventDAO;
+import main.java.dao.UserDAO;
 import main.java.model.CartItemModel;
 import main.java.model.EventModel;
 import main.java.model.UserModel;
@@ -96,6 +97,11 @@ public class DashboardController {
             // request events data from database
             ResultSet rs = eventDao.getAllEvents();
             while (rs.next()) {
+                String status = rs.getString("status");
+                // events with inactive status does not show in the dashboard table
+                if ("inactive".equalsIgnoreCase(status)) {
+                    continue;
+                }
                 EventModel event = new EventModel(
                         rs.getInt("id"),
                         rs.getString("name"),
@@ -103,7 +109,8 @@ public class DashboardController {
                         rs.getString("day"),
                         rs.getDouble("price"),
                         rs.getInt("tickets_sold"),
-                        rs.getInt("total_tickets")
+                        rs.getInt("total_tickets"),
+                        rs.getString("status")
                 );
 
                 eventList.add(event);
@@ -174,6 +181,19 @@ public class DashboardController {
         loader.setController(orders);
         Parent root = loader.load();
         stage.setTitle("All Orders");
+        stage.setScene(new Scene(root));
+    }
+
+    @FXML
+    public void displayUserDetailsView() throws IOException {
+        UserDAO userDAO = new UserDAO();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserDetailsView.fxml"));
+        UserController uc = new UserController(stage, userDAO, user);
+        uc.setPreviousScene(stage.getScene());
+        loader.setController(uc);
+        Parent root = loader.load();
+        stage.setTitle("User Profile");
         stage.setScene(new Scene(root));
     }
 

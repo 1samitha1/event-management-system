@@ -44,8 +44,8 @@ public class OrderController {
     private List<CartItemModel> cartLines;
     private List<OrderModel> ordersList;
 
+    // setting up the previous screen to easily go back
     private Scene previousScene;
-
     public void setPreviousScene(Scene scene) {
         this.previousScene = scene;
     }
@@ -70,7 +70,6 @@ public class OrderController {
         this.user = user;
         this.stage = stage;
     }
-
 
     @FXML
     public void initialize() {
@@ -130,6 +129,7 @@ public class OrderController {
                 Notification.showError("Invalid Confirmation code", "Enter correct 6 digits confirmation code.");
                 return;
             }
+
 
             for (CartItemModel c : cartLines) {
                 // create date and time format for the order

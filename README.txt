@@ -15,7 +15,7 @@ Student Name: Samitha Mihiranga Gunarathna
 // N Event disable function implemented
 // N Event adding & deletion functions implemented
 // N Event modification function implemented
-// N Viewing orders of all users implemented
-// N User password update and encryption implemented
+// Y Viewing orders of all users implemented
+// Y User password update and encryption implemented
 // N Junit test cases included
-// N Design pattern (in addition to MVC)
+// Y Design pattern (in addition to MVC)

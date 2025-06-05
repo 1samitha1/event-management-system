@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="390.0" prefWidth="824.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="eventGroupTable" layoutX="11.0" layoutY="43.0" prefHeight="299.0" prefWidth="803.0">
+        <columns>
+            <TableColumn fx:id="EGid" prefWidth="48.0" text="ID" />
+          <TableColumn fx:id="EGName" prefWidth="231.0" text="Event Name" />
+          <TableColumn fx:id="EGVenue" prefWidth="164.0" text="Venue" />
+            <TableColumn fx:id="EGDay" prefWidth="69.0" text="Day" />
+            <TableColumn fx:id="EGPrice" prefWidth="60.0" text="Price" />
+            <TableColumn fx:id="EGSolidTickets" text="Sold tickets" />
+            <TableColumn fx:id="EGTotalTickets" prefWidth="76.0" text="Total Tickets" />
+            <TableColumn fx:id="EGStatus" prefWidth="69.0" text="Status" />
+        </columns>
+      </TableView>
+      <Button layoutX="540.0" layoutY="354.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Close" />
+      <Button fx:id="eventDisable" layoutX="320.0" layoutY="354.0" mnemonicParsing="false" onAction="#disableEvent" prefHeight="26.0" prefWidth="98.0" text="Disable Event" />
+      <Button fx:id="updateEvent" layoutX="207.0" layoutY="354.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Update Event" />
+      <Button fx:id="Enable" layoutX="435.0" layoutY="354.0" mnemonicParsing="false" onAction="#enableEvent" prefHeight="26.0" prefWidth="91.0" text="Enable Event" />
+   </children>
+</AnchorPane>

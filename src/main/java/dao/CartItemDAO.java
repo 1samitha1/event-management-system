@@ -12,7 +12,7 @@ public class CartItemDAO implements CartItemDAOInterface {
 
     @Override
     public void setup() throws SQLException {
-        try (Connection connection = Database.getConnection();
+        try (Connection connection = Database.getInstance().getConnection();
              Statement st = connection.createStatement();) {
             String sql = "CREATE TABLE IF NOT EXISTS "  + TableName +  " (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(15) NOT NULL,\n" +
                     "eventId INTEGER NOT NULL, quantity INTEGER NOT NULL, UNIQUE(username, eventId) FOREIGN KEY(eventId) REFERENCES events(id))";
@@ -24,7 +24,7 @@ public class CartItemDAO implements CartItemDAOInterface {
     public boolean addCartItem(CartItemModel item) throws SQLException {
         String query = "INSERT INTO " + TableName +  " (username, eventId, quantity) VALUES (?, ?, ?)";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             st.setString(1, item.getUsername());
@@ -46,7 +46,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         String sql = "SELECT c.id, c.username, c.eventId, c.quantity, e.name AS eventName\n" +
                 " FROM " + TableName + " c JOIN eventsInfo e ON c.eventId = e.id WHERE c.username = ?";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setString(1, username);
@@ -70,7 +70,7 @@ public class CartItemDAO implements CartItemDAOInterface {
     public boolean updateCartItemQuantity(int cartItemId, int newQuantity) throws SQLException {
         String sql = "UPDATE " + TableName + " SET quantity = ? WHERE id = ?";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setInt(1, newQuantity);
@@ -84,7 +84,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         int totalReserved = getTotalReservedQuantityForEvent(eventId);
 
         String sql = "SELECT capacity, tickets_sold FROM events WHERE id = ?";
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setInt(1, eventId);
@@ -103,7 +103,7 @@ public class CartItemDAO implements CartItemDAOInterface {
     public int getTotalReservedQuantityForEvent(int eventId) throws SQLException {
         String query = "SELECT SUM(quantity) as total FROM" + TableName + " WHERE eventId = ?";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             st.setInt(1, eventId);
@@ -115,7 +115,7 @@ public class CartItemDAO implements CartItemDAOInterface {
     public void removeCartItem(int id) {
         System.out.println("id: " + id);
         String query = "DELETE FROM " + TableName + " WHERE id = ?";
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             st.setInt(1, id);

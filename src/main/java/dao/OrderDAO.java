@@ -14,8 +14,8 @@ public class OrderDAO implements OrderDAOInterface {
 
     @Override
     public void setup() throws SQLException {
-        // creating the order table if not exists
-        try (Connection connection = Database.getConnection();
+        // creating the orders table if not exists
+        try (Connection connection = Database.getInstance().getConnection();
              Statement st = connection.createStatement();) {
             String sql = "CREATE TABLE IF NOT EXISTS "  + TableName +  " (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(10) NOT NULL,\n" +
                     "eventId INTEGER NOT NULL, eventName VARCHAR(30) NOT NULL, totalPrice REAL NOT NULL, quantity INTEGER NOT NULL, orderDate VARCHAR(10) NOT NULL, FOREIGN KEY (eventId) REFERENCES eventsInfo(id) )";
@@ -30,7 +30,7 @@ public class OrderDAO implements OrderDAOInterface {
         String updateEventQuery = "UPDATE " + EventTableName + " SET tickets_sold = tickets_sold + ? WHERE id = ?";
         String deleteCartItemQuery = "DELETE FROM " + CartItemsTableName + " WHERE username = ? AND eventId = ?";
 
-        try (Connection con = Database.getConnection()) {
+        try (Connection con = Database.getInstance().getConnection()) {
             // stop auto commit with executeUpdate;
             con.setAutoCommit(false);
 
@@ -74,7 +74,7 @@ public class OrderDAO implements OrderDAOInterface {
         List<OrderModel> orders = new ArrayList<>();
         String query = "SELECT * FROM " + TableName + " WHERE username = ? ORDER BY orderDate DESC";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             st.setString(1, username);
@@ -98,21 +98,23 @@ public class OrderDAO implements OrderDAOInterface {
         }
 
         return orders;
+    }
+
+    // retrieve all orders for all the users
+    @Override
+    public ResultSet getAllOrders() {
+        String query = "SELECT * FROM " + TableName + " ORDER BY orderDate DESC";
+
+        try {
+
+            Connection con = Database.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+            return ps.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
-
-
-//    private boolean isDayStillBookable(String eventDay3Letters) {
-//        DayOfWeek today = LocalDate.now().getDayOfWeek();   // e.g. WEDNESDAY
-//        return switch (today) {
-//            case MONDAY    -> Set.of("Mon","Tue","Wed","Thu","Fri","Sat","Sun");
-//            case TUESDAY   -> Set.of("Tue","Wed","Thu","Fri","Sat","Sun");
-//            case WEDNESDAY -> Set.of("Wed","Thu","Fri","Sat","Sun");
-//            case THURSDAY  -> Set.of("Thu","Fri","Sat","Sun");
-//            case FRIDAY    -> Set.of("Fri","Sat","Sun");
-//            case SATURDAY  -> Set.of("Sat","Sun");
-//            case SUNDAY    -> Set.of("Sun");
-//        }.contains(eventDay3Letters);
-//    }
 }

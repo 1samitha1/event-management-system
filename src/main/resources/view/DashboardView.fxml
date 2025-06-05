@@ -34,7 +34,7 @@
                   <Font size="10.0" />
                </font>
             </Button>
-            <Button fx:id="showAllOrders1" layoutX="11.0" layoutY="1.0" mnemonicParsing="false" onAction="#viewAllOrders" prefHeight="18.0" prefWidth="71.0" text="Profile">
+            <Button fx:id="showAllOrders1" layoutX="11.0" layoutY="1.0" mnemonicParsing="false" onAction="#displayUserDetailsView" prefHeight="18.0" prefWidth="71.0" text="Profile">
                <font>
                   <Font size="10.0" />
                </font>

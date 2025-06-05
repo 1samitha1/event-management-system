@@ -11,7 +11,7 @@ public class UserDAO implements UserDAOInterface {
 
     @Override
     public void setup() throws SQLException {
-        try (Connection connection = Database.getConnection();
+        try (Connection connection = Database.getInstance().getConnection();
              Statement st = connection.createStatement();) {
             String sql = "CREATE TABLE IF NOT EXISTS "  + TableName +  " (username VARCHAR(10) NOT NULL,"
                     + "password VARCHAR(20) NOT NULL, preferredName VARCHAR(10) NOT NULL," + "PRIMARY KEY (username))";
@@ -24,7 +24,7 @@ public class UserDAO implements UserDAOInterface {
     public boolean register(UserModel user) throws SQLException {
         String query = "INSERT INTO users (username, password, preferredName) VALUES (?, ?, ?)";
 
-        try (Connection con = Database.getConnection();
+        try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
 
             //hashing password before add into db
@@ -46,9 +46,10 @@ public class UserDAO implements UserDAOInterface {
     // handle user login
     @Override
     public UserModel login(String username, String password) {
-        String query = "SELECT * FROM users WHERE username = ? AND password = ? ";
+        String query = "SELECT * FROM " + TableName + " WHERE username = ? AND password = ? ";
 
-        try (Connection con = Database.getConnection(); PreparedStatement st = con.prepareStatement(query)){
+        try (Connection con = Database.getInstance().getConnection();
+             PreparedStatement st = con.prepareStatement(query)){
 
             // create a matching hash for provided string password
             String hashedPassword = Authentication.hashPassword(password);
@@ -73,6 +74,53 @@ public class UserDAO implements UserDAOInterface {
         } catch (SQLException e){
             Notification.showError("Error", "Database error!");
             return null;
+        }
+    }
+
+    @Override
+    public UserModel getUserDetails(String username) {
+        String query = "SELECT * FROM " + TableName + " WHERE username = ?";
+        try(Connection con = Database.getInstance().getConnection();
+            PreparedStatement st = con.prepareStatement(query)) {
+            st.setString(1, username);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                // get user details from the query result
+                String userName = rs.getString("username");
+                String password = rs.getString("password");
+                String preferredName = rs.getString("preferredName");
+
+                return new UserModel(userName, password, preferredName);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean updateUserPassword(String username, String newPassword){
+        String query = "UPDATE " + TableName + " SET password = ? WHERE username = ?";
+
+        // creating new hash password
+        String newPasswordHash = Authentication.hashPassword(newPassword);
+
+        try(Connection con = Database.getInstance().getConnection();
+            PreparedStatement st = con.prepareStatement(query)) {
+
+            st.setString(1, newPasswordHash);
+            st.setString(2, username);
+
+            // updated new hash password to user
+            int rows = st.executeUpdate();
+
+            // return true if record updated
+            return rows > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

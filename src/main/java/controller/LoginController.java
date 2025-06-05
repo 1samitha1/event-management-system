@@ -19,6 +19,8 @@ public class LoginController {
 
     private final Stage stage;
     private final UserDAOInterface UserDAO;
+    private String adminUsername = "admin";
+    private String adminPass = "Admin321";
 
     //private UserDAO uDAO = new UserDAO();
 
@@ -45,13 +47,21 @@ public class LoginController {
             return;
         }
 
+        if (userNameVal.equals(adminUsername) && passwordVal.equals(adminPass)) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AdminDashboardView.fxml"));
+            AdminDashboardController adminController = new AdminDashboardController(stage);
+            loader.setController(adminController);
+            Parent root = loader.load();
+            stage.setTitle("Admin Dashboard");
+            stage.setScene(new Scene(root));
+            return;
+        }
+
         try {
             UserModel result = UserDAO.login(userNameVal, passwordVal);
 
             // User found
             if(result != null) {
-//                String preferredName = result.getPreferredName();
-//                System.out.println("Welcome " + preferredName);
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DashboardView.fxml"));
                 DashboardController dashboard = new DashboardController(stage, result);
