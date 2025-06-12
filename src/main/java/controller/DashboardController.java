@@ -134,14 +134,11 @@ public class DashboardController {
     public void displaySelection() throws IOException {
         EventModel selected = eventsTable.getSelectionModel().getSelectedItem();
 
-
         // display an error msg if there are no selected event.
         if (selected == null) {
             Notification.showError("Error", "Please select an event first.");
             return;
         }
-
-        System.out.println("Selected Event: " + selected.getName());
 
         // display event selection
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddCartItemView.fxml"));

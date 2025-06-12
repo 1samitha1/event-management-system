@@ -31,7 +31,6 @@ public class UserDAO implements UserDAOInterface {
             String passwordHash = Authentication.hashPassword(user.getPassword());
 
             st.setString(1, user.getUsername());
-//            st.setString(2, user.getPassword());
             st.setString(2, passwordHash);
             st.setString(3, user.getPreferredName());
 
@@ -77,6 +76,7 @@ public class UserDAO implements UserDAOInterface {
         }
     }
 
+    // retrieve details of user by username
     @Override
     public UserModel getUserDetails(String username) {
         String query = "SELECT * FROM " + TableName + " WHERE username = ?";
@@ -100,6 +100,7 @@ public class UserDAO implements UserDAOInterface {
         }
     }
 
+    // update password of the user
     @Override
     public boolean updateUserPassword(String username, String newPassword){
         String query = "UPDATE " + TableName + " SET password = ? WHERE username = ?";

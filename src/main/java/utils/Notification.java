@@ -2,6 +2,9 @@ package main.java.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 public class Notification {
     // Single method for display all error notifications
@@ -19,4 +22,17 @@ public class Notification {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    // Single method for display confirmation message
+    public static boolean showConfirmation(String title, String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+
 }

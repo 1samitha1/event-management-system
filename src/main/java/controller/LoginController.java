@@ -47,7 +47,8 @@ public class LoginController {
             return;
         }
 
-        if (userNameVal.equals(adminUsername) && passwordVal.equals(adminPass)) {
+        // if its Admin, check pre defined credentials
+        if (userNameVal.equalsIgnoreCase(adminUsername) && passwordVal.equals(adminPass)) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AdminDashboardView.fxml"));
             AdminDashboardController adminController = new AdminDashboardController(stage);
             loader.setController(adminController);

@@ -17,4 +17,7 @@ public interface EventDAOInterface {
     String getDayForEvent(int eventId) throws SQLException;
     List<EventModel> getEventsByName(String eventName) throws SQLException;
     boolean changeEventStatus(int eventId, String status) throws SQLException;
+    boolean updateEvent(EventModel event) throws SQLException;
+    boolean createNewEvent(EventModel event) throws SQLException;
+    boolean deleteEvent(int eventId) throws SQLException;
 }

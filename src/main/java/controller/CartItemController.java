@@ -83,8 +83,6 @@ public class CartItemController {
             String dayOfTheEvent = eventDAO.getDayForEvent(this.selectedEvent.getId().get());
             boolean bookableDay = isDayBookable(dayOfTheEvent);
 
-            System.out.println("bookableDay : "+ bookableDay);
-
             if (dayOfTheEvent == null || !bookableDay) {
                 Notification.showError("Day is passed", "You can no longer book this event on (" + dayOfTheEvent + "). Event day is passed!");
                 return;
@@ -96,6 +94,7 @@ public class CartItemController {
                 return;
             }
 
+            // counting available tickets
             int availableTickets = selectedEvent.getTotalTickets().get() - selectedEvent.getTicketsSold().get();
 
             // check is there are enough seats for added quantity
@@ -114,8 +113,8 @@ public class CartItemController {
 
             if(result){
                DashboardController dbc = new DashboardController(this.stage, this.user);
+               // display the dashboard after adding
                dbc.displayDashboard(this.user);
-               System.out.println("Cart Item added");
             }
 
         } catch (NumberFormatException e) {
@@ -126,7 +125,8 @@ public class CartItemController {
         }
     }
 
-    private boolean isDayBookable(String eventDay3) {
+    // helper methd for check if elected event day is same or future day of the week
+    public boolean isDayBookable(String eventDay3) {
         DayOfWeek eventDay = switch (eventDay3) {
             case "Mon" -> DayOfWeek.MONDAY;
             case "Tue" -> DayOfWeek.TUESDAY;
@@ -140,10 +140,8 @@ public class CartItemController {
 
         DayOfWeek today = LocalDate.now().getDayOfWeek();
 
-        // Check if event day is today or later in the same week
+        // Check if event day is today or later day in the week
         return eventDay.getValue() >= today.getValue();
 
     }
-
-
 }

@@ -202,12 +202,13 @@ public class OrderController {
         }
     }
 
+    // handle order export to a file
     @FXML
     private void handleExportOrdersToFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Orders As");
 
-        // default filename
+        // default filename (user can change this while export)
         fileChooser.setInitialFileName("orderList.txt");
 
         //only show text files
@@ -221,13 +222,14 @@ public class OrderController {
         }
     };
 
+    // exporting orders in to a file
     private void exportOrdersToFile(File file) {
         //create file writer for write into the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (OrderModel order : ordersList) {
                 //convert id into 4 digits
                 String orderIdFormatted = String.format("%04d", order.getId());
-                //create file lines
+                //create file lines with order data
                 String line = String.format(
                         "Order No: #%s Event: %s (%d seats) Date: %s Total: AUD %.2f \n",
                         orderIdFormatted,

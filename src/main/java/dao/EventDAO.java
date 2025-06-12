@@ -80,6 +80,7 @@ public class EventDAO implements EventDAOInterface {
         return st.executeQuery();
     }
 
+    // retrieve price of the event
     @Override
     public double getPriceForEvent(int eventId) throws SQLException {
         String query = "SELECT price FROM " + TableName + " WHERE id = ?";
@@ -98,6 +99,7 @@ public class EventDAO implements EventDAOInterface {
         }
     }
 
+    // retrieve event by id and name
     @Override
     public ResultSet getEvent(int eventId, String eventName){
         String query = "SELECT * FROM " + TableName + " WHERE id = ? AND name = ?";
@@ -120,6 +122,7 @@ public class EventDAO implements EventDAOInterface {
 
     };
 
+    // retrieve day of the event
     @Override
     public String getDayForEvent(int eventId) {
         String query = "SELECT day FROM " + TableName + " WHERE id = ?";
@@ -136,6 +139,7 @@ public class EventDAO implements EventDAOInterface {
         }
     };
 
+    // retrieve events by event name
     @Override
     public List<EventModel> getEventsByName(String eventName) {
         String query = "SELECT * FROM " + TableName + " WHERE name = ?";
@@ -180,6 +184,116 @@ public class EventDAO implements EventDAOInterface {
 
             int rowsUpdated = st.executeUpdate();
             return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // helper method to check duplicates
+    private boolean checkForDuplicates(Connection con, EventModel event) {
+        String findDuplicatesQuery = "SELECT 1 FROM " + TableName + " WHERE name = ? AND venue = ? AND day = ? AND price = ? AND total_tickets = ?";
+
+        try (PreparedStatement chk = con.prepareStatement(findDuplicatesQuery)) {
+
+            chk.setString(1, event.getName().get());
+            chk.setString(2, event.getVenue().get());
+            chk.setString(3, event.getDay().get());
+            chk.setDouble(4, event.getPrice().get());
+            chk.setInt(4, event.getTotalTickets().get());
+
+            try (ResultSet rs = chk.executeQuery()) {
+                if (rs.next()) {
+                    // duplicate available
+                    System.out.println("Error: Duplicate event found.");
+                    return true;
+                }else {
+                    // no duplicate available
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // update selected event
+    @Override
+    public boolean updateEvent(EventModel event) {
+        String updateQuery = "UPDATE " + TableName + " SET name = ?, venue = ?, day = ?, price = ?, total_tickets = ?, status = ?, tickets_sold = ? WHERE id = ?";
+
+        try (Connection con = Database.getInstance().getConnection()) {
+
+            // Check for duplicates
+            boolean duplicatedFound = checkForDuplicates(con, event);
+            if(duplicatedFound){
+                return false;
+            }
+
+            PreparedStatement ps = con.prepareStatement(updateQuery);
+
+            ps.setString(1, event.getName().get());
+            ps.setString(2, event.getVenue().get());
+            ps.setString(3, event.getDay().get());
+            ps.setDouble(4, event.getPrice().get());
+            ps.setInt(5, event.getTotalTickets().get());
+            ps.setString(6, event.getStatus().get());
+            ps.setInt(7, event.getTicketsSold().get());
+            ps.setInt(8, event.getId().get());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // create a new event
+    @Override
+    public boolean createNewEvent(EventModel event) {
+        String insertQuery = "INSERT INTO " + TableName + " (name, venue, day, price, tickets_sold, total_tickets, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = Database.getInstance().getConnection()) {
+
+            // Check for duplicates
+            boolean duplicatedFound = checkForDuplicates(con, event);
+            if(duplicatedFound){
+                return false;
+            }
+
+            // if no duplicates, inserting new event
+            PreparedStatement ps = con.prepareStatement(insertQuery);
+
+            ps.setString(1, event.getName().get());
+            ps.setString(2, event.getVenue().get());
+            ps.setString(3, event.getDay().get());
+            ps.setDouble(4, event.getPrice().get());
+            ps.setInt(5, event.getTicketsSold().get());
+            ps.setInt(6, event.getTotalTickets().get());
+            ps.setString(7, event.getStatus().get());
+
+            int insertRes = ps.executeUpdate();
+            return insertRes > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // delete an event by id
+    @Override
+    public boolean deleteEvent(int eventId) {
+        String query = "DELETE FROM " + TableName + " WHERE id = ?";
+
+        try (Connection con = Database.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, eventId);
+            int deleteRes = ps.executeUpdate();
+            return deleteRes > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

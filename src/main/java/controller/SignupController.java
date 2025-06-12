@@ -38,6 +38,7 @@ public class SignupController {
     @FXML
     private TextField preferredName;
 
+    // execute signup
     @FXML
     public void signupHandler(ActionEvent event) {
         String usernameField = username.getText().trim();

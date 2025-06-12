@@ -20,6 +20,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         }
     }
 
+    // adding new cart items
     @Override
     public boolean addCartItem(CartItemModel item) throws SQLException {
         String query = "INSERT INTO " + TableName +  " (username, eventId, quantity) VALUES (?, ?, ?)";
@@ -40,6 +41,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         }
     }
 
+    // retreive cart items by user name
     @Override
     public List<CartItemModel> getItemsForUser(String username) throws SQLException {
         List<CartItemModel> items = new ArrayList<>();
@@ -66,6 +68,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         return items;
     }
 
+    // update cart items quantity
     @Override
     public boolean updateCartItemQuantity(int cartItemId, int newQuantity) throws SQLException {
         String sql = "UPDATE " + TableName + " SET quantity = ? WHERE id = ?";
@@ -79,6 +82,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         }
     }
 
+    // check is there are remaining seats with requested seats for the event
     @Override
     public boolean isQuantityAvailable(int eventId, int requestedQty) throws SQLException {
         int totalReserved = getTotalReservedQuantityForEvent(eventId);
@@ -100,6 +104,7 @@ public class CartItemDAO implements CartItemDAOInterface {
         }
     }
 
+    // retrieve total booked seats of an event
     public int getTotalReservedQuantityForEvent(int eventId) throws SQLException {
         String query = "SELECT SUM(quantity) as total FROM" + TableName + " WHERE eventId = ?";
 
@@ -112,8 +117,8 @@ public class CartItemDAO implements CartItemDAOInterface {
         }
     }
 
+    // delete cart item
     public void removeCartItem(int id) {
-        System.out.println("id: " + id);
         String query = "DELETE FROM " + TableName + " WHERE id = ?";
         try (Connection con = Database.getInstance().getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
@@ -124,7 +129,5 @@ public class CartItemDAO implements CartItemDAOInterface {
             Notification.showError("Error Deleting", "Failed to remove cart item");
             throw new RuntimeException(e);
         }
-
     }
-
 }

@@ -38,6 +38,8 @@ public class EventModel {
     public IntegerProperty getTotalTickets() {return totalTickets;}
     public IntegerProperty getTicketsSold() {return ticketsSold;}
     public StringProperty getStatus() { return status;}
+    public StringProperty getDay() { return day;}
+    public DoubleProperty getPrice() { return price;}
 
     // For admin dashboard group events
     private final StringProperty displayVenueDay = new SimpleStringProperty();

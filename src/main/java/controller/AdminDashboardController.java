@@ -2,13 +2,13 @@ package main.java.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import main.java.dao.EventDAO;
@@ -67,21 +67,41 @@ public class AdminDashboardController {
     @FXML
     private TableColumn<EventModel, Number> totalTicketsCol;
 
-
     public AdminDashboardController(Stage stage) {
         this.stage = stage;
     }
 
+    // list for hold all orders
     private final ObservableList<OrderModel> allOrderList = FXCollections.observableArrayList();
-
-    private final ObservableList<EventModel> groupedEvents = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // welcome msg for admin
         if(adminWelcomeMsg != null){
             adminWelcomeMsg.setText("Welcome: Admin");
         }
 
+        // Events for admin events table columns
+        if(eventCol != null){
+            eventCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
+        }
+
+        if(venueDayPriceCol != null){
+            venueDayPriceCol.setCellValueFactory(cell -> cell.getValue().venueProperty());
+        }
+
+        if(soldTicketsCol != null){
+            soldTicketsCol.setCellValueFactory(cell -> cell.getValue().ticketsSoldProperty());
+        }
+
+        if(totalTicketsCol != null) {
+            totalTicketsCol.setCellValueFactory(cell -> cell.getValue().totalTicketsProperty());
+        }
+
+        // loading events for event group table
+        loadEventsToTableForAdmin();
+
+        // All orders for all users table columns
         if(userCol != null){
             userCol.setCellValueFactory(cell -> cell.getValue().usernameProperty());
         }
@@ -102,19 +122,12 @@ public class AdminDashboardController {
             orderDateCol.setCellValueFactory(cell -> cell.getValue().orderDateProperty());
         }
 
-        // for all user orders
+        // loading orders for all user orders table
         loadAllOrdersToTable();
-
-        eventCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
-        venueDayPriceCol.setCellValueFactory(cell -> cell.getValue().venueProperty()); // sessions
-        soldTicketsCol.setCellValueFactory(cell -> cell.getValue().ticketsSoldProperty());
-        totalTicketsCol.setCellValueFactory(cell -> cell.getValue().totalTicketsProperty());
-
-        // for event group table
-        loadEventsToTableForAdmin();
 
     }
 
+    // to view all orders for all the users
     @FXML
     public void viewAllOrders() throws IOException {
         this.previousScene = stage.getScene();
@@ -134,7 +147,7 @@ public class AdminDashboardController {
         try{
             ResultSet rs = orderDAO.getAllOrders();
             while (rs.next()) {
-                OrderModel event = new OrderModel(
+                OrderModel order = new OrderModel(
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getInt("eventId"),
@@ -144,7 +157,7 @@ public class AdminDashboardController {
                         rs.getString("orderDate")
                 );
 
-                allOrderList.add(event);
+                allOrderList.add(order);
             }
             // adding data to Table view
             if(userOrdersTable != null){
@@ -158,13 +171,12 @@ public class AdminDashboardController {
     // close screen
     @FXML
     public void goBack() {
-        System.out.println("1");
         if (previousScene != null) {
-            System.out.println("2");
             stage.setScene(previousScene);
         }
     }
 
+    // load grouped events to event table of the admin dashboard
     private void loadEventsToTableForAdmin() {
         EventDAO eventDao = new EventDAO();
         ObservableList<EventModel> groupedList = FXCollections.observableArrayList();
@@ -189,10 +201,10 @@ public class AdminDashboardController {
                 // Group by just event name
                 String eventKey = name;
 
-                // Unique session string
+                // Unique event session string
                 String session = venue + " – " + day + " – ($" + price + ")";
 
-                // Add session string only once
+                // Adding event session string only once
                 sessionTextMap.computeIfAbsent(eventKey, k -> new LinkedHashSet<>()).add(session);
                 totalTicketsMap.put(eventKey, totalTicketsMap.getOrDefault(eventKey, 0) + totalTickets);
                 soldTicketsMap.put(eventKey, soldTicketsMap.getOrDefault(eventKey, 0) + soldTickets);
@@ -218,33 +230,55 @@ public class AdminDashboardController {
                 groupedList.add(groupedModel);
             }
 
-            eventsTable.setItems(groupedList);
+            if(eventsTable != null){
+                eventsTable.setItems(groupedList);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    // Handle click events
     @FXML
     public void manageEventsClicked() throws IOException {
         EventModel selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
-        String eventName = selectedEvent.getName().get();
 
+        // check if an event is selected
         if (selectedEvent == null) {
             Notification.showWarning("You must select an event", "Please select an event group from the table.");
             return;
         }
+
+        String eventName = selectedEvent.getName().get();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectedEventGroupView.fxml"));
         EventGroupController egc = new EventGroupController(eventName,stage);
         egc.setPreviousScene(stage.getScene());
         loader.setController(egc);
         Parent root = loader.load();
-        stage.setTitle("Manage event group");
+        stage.setTitle("Manage Event Group");
         stage.setScene(new Scene(root));
-
-
     }
 
+    // logout for admin
+    @FXML
+    public void adminLogout(ActionEvent Event){
+        LoginController lc = new LoginController(stage);
+        //calling the method to display login view
+        lc.displayLoginPage(Event);
+    }
 
+    // Add new event popup
+    @FXML
+    private void displayAddEventPopup() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HandleEventView.fxml"));
+        EventController EC = new EventController(stage, null);
+        EC.setPreviousScene(stage.getScene());
+        EC.setAction("insert");
+        loader.setController(EC);
+        Parent root = loader.load();
+        stage.setTitle("Add New Event");
+        stage.setScene(new Scene(root));
+    }
 }

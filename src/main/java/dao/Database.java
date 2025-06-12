@@ -18,6 +18,7 @@ public class Database {
         }
     }
 
+    // use instance of the database connection
     public static synchronized Database getInstance() {
         if (instance == null) {
             instance = new Database();
@@ -25,6 +26,7 @@ public class Database {
         return instance;
     }
 
+    // get database connection
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
@@ -35,29 +37,4 @@ public class Database {
         }
         return connection;
     }
-
-
-
-//    private Database() {
-//        try {
-//            connection = Database.getConnection();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static Database getInstance(){
-//        if(instance == null){
-//            instance = new Database();
-//        }
-//        return instance;
-//    }
-
-//    public static Connection getConnection() throws SQLException {
-//        // DriverManager is the basic service for managing a set of JDBC drivers
-//        // Can also pass username and password
-//        return DriverManager.getConnection(connectionString);
-//    }
-
-
 }

@@ -27,11 +27,11 @@ public class OrderDAO implements OrderDAOInterface {
     @Override
     public boolean addOrder(OrderModel order)  {
         String insertOrderQuery = "INSERT INTO " + TableName + " (username, eventId, eventName, quantity, totalPrice, orderDate) VALUES (?, ?, ?, ?, ?, ?)";
-        String updateEventQuery = "UPDATE " + EventTableName + " SET tickets_sold = tickets_sold + ? WHERE id = ?";
+        String updateEventQuery = "UPDATE " + EventTableName + " SET tickets_sold = tickets_sold + ?, total_tickets = total_tickets - ? WHERE id = ?";
         String deleteCartItemQuery = "DELETE FROM " + CartItemsTableName + " WHERE username = ? AND eventId = ?";
 
         try (Connection con = Database.getInstance().getConnection()) {
-            // stop auto commit with executeUpdate;
+            // stop auto running with executeUpdate because multiple queries will run;
             con.setAutoCommit(false);
 
             // insert to order table
@@ -45,10 +45,11 @@ public class OrderDAO implements OrderDAOInterface {
                 ins.executeUpdate();
             }
 
-            // update sold_tickets in eventsInfo table
+            // update sold_tickets and total_tickets in eventsInfo table
             try (PreparedStatement up = con.prepareStatement(updateEventQuery)) {
                 up.setInt(1, order.getQuantity());
-                up.setInt(2, order.getEventId());
+                up.setInt(2, order.getQuantity());
+                up.setInt(3, order.getEventId());
                 up.executeUpdate();
             }
 
@@ -113,8 +114,46 @@ public class OrderDAO implements OrderDAOInterface {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
+    // check if there are any order for provided event id
+    @Override
+    public boolean isOrderAvailableForEvent(int eventId){
+        String query = "SELECT 1 FROM " + TableName + " WHERE eventId = ? LIMIT 1";
+
+        try (Connection con = Database.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, eventId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // orders available
+                    System.out.println("Order available for the event.");
+                    return true;
+                }else {
+                    // no orders available
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // delete orders related to the event
+    @Override
+    public void deleteOrderByEvent(int eventId) {
+        String query = "DELETE FROM " + TableName + " WHERE eventId = ?";
+
+        try (Connection con = Database.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, eventId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

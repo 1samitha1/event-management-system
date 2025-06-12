@@ -12,4 +12,6 @@ public interface OrderDAOInterface {
     boolean addOrder(OrderModel order) throws SQLException;
     List<OrderModel> getOrdersByUsername(String username) throws SQLException;
     ResultSet getAllOrders() throws SQLException;
+    boolean isOrderAvailableForEvent(int eventId) throws SQLException;
+    void deleteOrderByEvent(int eventId) throws SQLException;
 }

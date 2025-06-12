@@ -33,6 +33,12 @@ public class CartController {
     @FXML
     private Button cartCheckout;
 
+    @FXML
+    private Button cartRemoveItem;
+
+    @FXML
+    private Button cartUpdateItem;
+
     public CartController(Stage stage, UserModel user) {
         this.stage = stage;
         this.user = user;
@@ -51,8 +57,11 @@ public class CartController {
 
             cartTable.setItems(cartList);
 
-            // if there are no items in car, the checkout button is disabled.
-            cartCheckout.setDisable(cartList.isEmpty());
+            // if there are no items in cart, disabling buttons.
+            if(cartList.isEmpty()){
+                disableActionButtons();
+            }
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -60,14 +69,21 @@ public class CartController {
 
     }
 
+    // display event selection
     public void displayEventsInCart() throws IOException {
-        // display event selection
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CartView.fxml"));
         CartController cart = new CartController(this.stage, this.user);
         loader.setController(cart);
         Parent root = loader.load();
         stage.setTitle("Shopping Cart");
         stage.setScene(new Scene(root));
+    }
+
+    // buttons will be disabled if no item selected
+    private void disableActionButtons(){
+        cartCheckout.setDisable(true);
+        cartRemoveItem.setDisable(true);
+        cartUpdateItem.setDisable(true);
     }
 
 
@@ -83,6 +99,7 @@ public class CartController {
         oc.showCheckoutView();
     }
 
+    // remove car item from the cart
     @FXML
     public void removeCartItem(){
         CartItemModel selectedItem = cartTable.getSelectionModel().getSelectedItem();
@@ -94,21 +111,30 @@ public class CartController {
             cartItemDAO.removeCartItem(selectedItem.getId());
             // remove from the view
             cartTable.getItems().remove(selectedItem);
+
+            // if all items are removed, disable the buttons
+            if(cartTable.getItems().isEmpty()){
+                disableActionButtons();
+            }
         }else {
-            Notification.showWarning("Select item first", "You must select item from the table before remove");
+            // in case events unselected
+            Notification.showWarning("No event selected", "You must select item from the table before remove");
         }
 
     }
 
+    // update cart view
     @FXML
     public void displayCartUpdateView() throws IOException, SQLException {
         CartItemModel selectedItem = cartTable.getSelectionModel().getSelectedItem();
 
+        // validation in case events unselected
         if (selectedItem == null) {
-            Notification.showError("Select item", "Choose a cart row first.");
+            Notification.showWarning("No event selected", "You must select item from the table");
             return;
         }
 
+        // display view
         FXMLLoader fx = new FXMLLoader(getClass().getResource("/view/UpdateCartItemView.fxml"));
         Parent root = fx.load();
 

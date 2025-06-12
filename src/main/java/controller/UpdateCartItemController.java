@@ -35,6 +35,7 @@ public class UpdateCartItemController {
     }
 
 
+    // update item quantity
     @FXML
     public void updateQuantity(){
         int quantityNum = Integer.parseInt(quantityUpdate.getText());

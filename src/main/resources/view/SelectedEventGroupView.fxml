@@ -19,9 +19,10 @@
             <TableColumn fx:id="EGStatus" prefWidth="69.0" text="Status" />
         </columns>
       </TableView>
-      <Button layoutX="540.0" layoutY="354.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Close" />
-      <Button fx:id="eventDisable" layoutX="320.0" layoutY="354.0" mnemonicParsing="false" onAction="#disableEvent" prefHeight="26.0" prefWidth="98.0" text="Disable Event" />
-      <Button fx:id="updateEvent" layoutX="207.0" layoutY="354.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Update Event" />
-      <Button fx:id="Enable" layoutX="435.0" layoutY="354.0" mnemonicParsing="false" onAction="#enableEvent" prefHeight="26.0" prefWidth="91.0" text="Enable Event" />
+      <Button layoutX="612.0" layoutY="353.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Close" />
+      <Button fx:id="eventDisable" layoutX="276.0" layoutY="354.0" mnemonicParsing="false" onAction="#disableEvent" prefHeight="26.0" prefWidth="98.0" text="Disable Event" />
+      <Button fx:id="updateEvent" layoutX="159.0" layoutY="354.0" mnemonicParsing="false" onAction="#displayUpdateEventPopup" prefHeight="26.0" prefWidth="98.0" text="Update Event" />
+      <Button fx:id="enableEvent" layoutX="392.0" layoutY="354.0" mnemonicParsing="false" onAction="#enableEvent" prefHeight="26.0" prefWidth="91.0" text="Enable Event" />
+      <Button fx:id="updateEvent1" layoutX="499.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteSelectedEvent" prefHeight="26.0" prefWidth="98.0" text="Delete Event" />
    </children>
 </AnchorPane>

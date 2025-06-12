@@ -29,7 +29,7 @@
             <Insets />
          </opaqueInsets>
       </TableView>
-      <Button layoutX="722.0" layoutY="74.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="60.0" text="Logout">
+      <Button layoutX="722.0" layoutY="74.0" mnemonicParsing="false" onAction="#adminLogout" prefHeight="20.0" prefWidth="60.0" text="Logout">
          <font>
             <Font size="10.0" />
          </font>
@@ -44,7 +44,7 @@
             <Font size="10.0" />
          </font>
       </Button>
-      <Button layoutX="20.0" layoutY="74.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="81.0" text="Add Event">
+      <Button layoutX="20.0" layoutY="74.0" mnemonicParsing="false" onAction="#displayAddEventPopup" prefHeight="20.0" prefWidth="81.0" text="Add Event">
          <font>
             <Font size="10.0" />
          </font>

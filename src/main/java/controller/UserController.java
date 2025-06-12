@@ -57,6 +57,7 @@ public class UserController {
         }
     }
 
+    // update user password
     @FXML
     private void updatePassword(){
 

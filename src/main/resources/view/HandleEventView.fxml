@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="325.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="123.0" layoutY="76.0" text="Name:" />
@@ -13,12 +12,12 @@
       <Label layoutX="122.0" layoutY="115.0" text="Venue:" />
       <TextField fx:id="eventVenue" layoutX="252.0" layoutY="110.0" prefHeight="26.0" prefWidth="219.0" />
       <Label layoutX="123.0" layoutY="155.0" text="Day:" />
-      <TextField fx:id="eventday" layoutX="252.0" layoutY="150.0" prefHeight="26.0" prefWidth="219.0" />
+      <TextField fx:id="eventDay" layoutX="252.0" layoutY="150.0" prefHeight="26.0" prefWidth="219.0" />
       <Label layoutX="123.0" layoutY="193.0" text="Price:" />
-      <TextField fx:id="EventPrice" layoutX="252.0" layoutY="188.0" prefHeight="26.0" prefWidth="219.0" />
-      <Label layoutX="121.0" layoutY="231.0" text="Capacity:" />
-      <TextField fx:id="EventCapacity" layoutX="252.0" layoutY="226.0" prefHeight="26.0" prefWidth="219.0" />
-      <Button layoutX="221.0" layoutY="280.0" mnemonicParsing="false" text="Proceed" />
-      <Button layoutX="307.0" layoutY="280.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="63.0" text="Close" />
+      <TextField fx:id="eventPrice" layoutX="252.0" layoutY="188.0" prefHeight="26.0" prefWidth="219.0" />
+      <Label layoutX="121.0" layoutY="231.0" text="Total Tickets:" />
+      <TextField fx:id="eventCapacity" layoutX="252.0" layoutY="226.0" prefHeight="26.0" prefWidth="219.0" />
+      <Button layoutX="221.0" layoutY="280.0" mnemonicParsing="false" onAction="#proceedAction" text="Proceed" />
+      <Button layoutX="307.0" layoutY="280.0" mnemonicParsing="false" onAction="#close" prefHeight="26.0" prefWidth="63.0" text="Close" />
    </children>
 </AnchorPane>
